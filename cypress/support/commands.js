@@ -23,3 +23,15 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("fillInputAndRun", (text) => {
+  cy.get("#codeInput").type(text);
+  cy.get("#runButton").click();
+});
+
+Cypress.Commands.add("validateOutputText", (status, text) => {
+  cy.get("#outputArea", { timeout: 6000 })
+    .should("contain.text", status)
+    .and("contain.text", text)
+    .and("be.visible");
+});
