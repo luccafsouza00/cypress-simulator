@@ -1,4 +1,5 @@
 const { defineConfig } = require("cypress")
+const cypressSplit = require("cypress-split")
 
 module.exports = defineConfig({
   viewportHeight: 1024,
