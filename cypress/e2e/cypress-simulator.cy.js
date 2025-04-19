@@ -127,15 +127,23 @@ describe("Cypress simulator", () => {
     cy.get("#runButton").should("be.disabled");
   });
 
-  it.only("clears the code output when logging off then logging in again", () => {
-    cy.fillInputAndRun("test")
-    cy.validateOutputText("Error", "test")
+  it("clears the code output when logging off then logging in again", () => {
+    cy.fillInputAndRun("test");
+    cy.validateOutputText("Error", "test");
 
     cy.get("#sandwich-menu").click();
     cy.get("#logoutButton").click();
     cy.contains("button", "Login").click();
 
-    cy.get("#outputArea").should("have.text", "")
+    cy.get("#outputArea").should("have.text", "");
+  });
+
+  it.only("doesn't show the cookie consent banner on the login page", () => {
+    cy.clearAllLocalStorage()
+
+    cy.reload()
+
+    cy.get('#cookieConsent').should('not.be.visible')
   });
 });
 
@@ -169,7 +177,7 @@ describe("Cypress Simulator - Cookies consent", () => {
 
 describe("Cypress Simulator - Captcha", () => {
   beforeEach(() => {
-    cy.visit("./src/index.html?");
+    cy.visit("./src/index.html");
     cy.contains("button", "Login").click();
   });
 
