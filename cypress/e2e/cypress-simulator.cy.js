@@ -1,17 +1,17 @@
 describe("Cypress simulator", () => {
   beforeEach(() => {
+    cy.login();
     cy.visit("./src/index.html?skipCaptcha=true", {
       onBeforeLoad: (window) => {
         window.localStorage.setItem("cookieConsent", "accepted");
       },
     });
-    cy.contains("button", "Login").click();
   });
 
   it("successfully simulates a cypress command", () => {
     const cypressComand = "cy.get('button')";
 
-    cy.fillInputAndRun(cypressComand);
+    cy.fillTextAreaAndRun(cypressComand);
 
     cy.validateOutputText("Success", cypressComand);
   });
@@ -19,7 +19,7 @@ describe("Cypress simulator", () => {
   it("shows an error when entering and running an invalid Cypress command", () => {
     const invalidCypressCommand = "cy.run()";
 
-    cy.fillInputAndRun(invalidCypressCommand);
+    cy.fillTextAreaAndRun(invalidCypressCommand);
 
     cy.validateOutputText("Error", invalidCypressCommand);
   });
@@ -27,7 +27,7 @@ describe("Cypress simulator", () => {
   it("shows a warning when entering and running a not-implemented Cypress", () => {
     const cypressCommandNotImplemented = "cy.contains('button')";
 
-    cy.fillInputAndRun(cypressCommandNotImplemented);
+    cy.fillTextAreaAndRun(cypressCommandNotImplemented);
 
     cy.validateOutputText(
       "Warning",
@@ -38,13 +38,13 @@ describe("Cypress simulator", () => {
   it("shows an error when entering and running a valid cypress command without parentheses", () => {
     const cypressCommandWithoutParentheses = "cy.get";
 
-    cy.fillInputAndRun(cypressCommandWithoutParentheses);
+    cy.fillTextAreaAndRun(cypressCommandWithoutParentheses);
 
     cy.validateOutputText("Error", cypressCommandWithoutParentheses);
   });
 
   it("asks for help and gets common Cypress commands and examples with a link to the docs", () => {
-    cy.fillInputAndRun("help");
+    cy.fillTextAreaAndRun("help");
 
     cy.validateOutputText(
       "Common Cypress commands and examples:",
@@ -58,7 +58,7 @@ describe("Cypress simulator", () => {
   });
 
   it("maximizes and minimizes a simulation result", () => {
-    cy.fillInputAndRun("help");
+    cy.fillTextAreaAndRun("help");
 
     cy.validateOutputText(
       "Common Cypress commands and examples:",
@@ -88,7 +88,7 @@ describe("Cypress simulator", () => {
   });
 
   it("shows the running state before showing the final result", () => {
-    cy.fillInputAndRun("test");
+    cy.fillTextAreaAndRun("test");
     cy.get("#runButton")
       .should("contain.text", "Running...")
       .and("be.disabled");
@@ -128,7 +128,7 @@ describe("Cypress simulator", () => {
   });
 
   it("clears the code output when logging off then logging in again", () => {
-    cy.fillInputAndRun("test");
+    cy.fillTextAreaAndRun("test");
     cy.validateOutputText("Error", "test");
 
     cy.get("#sandwich-menu").click();
@@ -138,19 +138,19 @@ describe("Cypress simulator", () => {
     cy.get("#outputArea").should("have.text", "");
   });
 
-  it.only("doesn't show the cookie consent banner on the login page", () => {
-    cy.clearAllLocalStorage()
+  it("doesn't show the cookie consent banner on the login page", () => {
+    cy.clearAllLocalStorage();
 
-    cy.reload()
+    cy.reload();
 
-    cy.get('#cookieConsent').should('not.be.visible')
+    cy.get("#cookieConsent").should("not.be.visible");
   });
 });
 
 describe("Cypress Simulator - Cookies consent", () => {
   beforeEach(() => {
+    cy.login();
     cy.visit("./src/index.html?skipCaptcha=true");
-    cy.contains("button", "Login").click();
   });
 
   it("consents on the cookies usage", () => {
