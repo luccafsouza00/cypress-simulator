@@ -8,14 +8,16 @@ describe("Cypress simulator", () => {
     });
   });
 
-  it("successfully simulates a cypress command", () => {
-    const cypressComand = "cy.get('button')";
-
-    cy.fillTextAreaAndRun(cypressComand);
-
-    cy.validateOutputText("Success", cypressComand);
-  });
-
+  Cypress._.times(100, () => {
+    it("successfully simulates a cypress command", () => {
+      const cypressComand = "cy.get('button')";
+  
+      cy.fillTextAreaAndRun(cypressComand);
+  
+      cy.validateOutputText("Success", cypressComand);
+    });
+  })
+  
   it("shows an error when entering and running an invalid Cypress command", () => {
     const invalidCypressCommand = "cy.run()";
 
