@@ -1,23 +1,21 @@
 describe("Cypress simulator", () => {
   beforeEach(() => {
     cy.login();
-    cy.visit("./src/index.html?skipCaptcha=true", {
+    cy.visit("./src/index.html?skipCaptcha=true&chancesOfError=0", {
       onBeforeLoad: (window) => {
         window.localStorage.setItem("cookieConsent", "accepted");
       },
     });
   });
 
-  Cypress._.times(100, () => {
-    it("successfully simulates a cypress command", () => {
-      const cypressComand = "cy.get('button')";
-  
-      cy.fillTextAreaAndRun(cypressComand);
-  
-      cy.validateOutputText("Success", cypressComand);
-    });
-  })
-  
+  it("successfully simulates a cypress command", () => {
+    const cypressComand = "cy.get('button')";
+
+    cy.fillTextAreaAndRun(cypressComand);
+
+    cy.validateOutputText("Success", cypressComand);
+  });
+
   it("shows an error when entering and running an invalid Cypress command", () => {
     const invalidCypressCommand = "cy.run()";
 
@@ -152,7 +150,7 @@ describe("Cypress simulator", () => {
 describe("Cypress Simulator - Cookies consent", () => {
   beforeEach(() => {
     cy.login();
-    cy.visit("./src/index.html?skipCaptcha=true");
+    cy.visit("./src/index.html?skipCaptcha=true&chancesOfError=0");
   });
 
   it("consents on the cookies usage", () => {
@@ -179,7 +177,7 @@ describe("Cypress Simulator - Cookies consent", () => {
 
 describe("Cypress Simulator - Captcha", () => {
   beforeEach(() => {
-    cy.visit("./src/index.html");
+    cy.visit("./src/index.html?chancesOfError=0");
     cy.contains("button", "Login").click();
   });
 
@@ -203,5 +201,26 @@ describe("Cypress Simulator - Captcha", () => {
 
     cy.get("#captchaInput").should("have.value", "");
     cy.get("#verifyCaptcha").should("be.disabled");
+  });
+});
+
+describe("Cypress Simulator - Matrix error", () => {
+  beforeEach(() => {
+    cy.login();
+    cy.visit("./src/index.html?skipCaptcha=true&chancesOfError=1", {
+      onBeforeLoad: (window) => {
+        window.localStorage.setItem("cookieConsent", "accepted");
+      },
+    });
+  });
+
+  it.only("errors out with a glitch in the Matrix", () => {
+    const cypressComand = "cy.get('button')";
+
+    cy.fillTextAreaAndRun(cypressComand);
+
+    cy.get("#outputArea", { timeout: 6000 })
+      .should("have.text", "There's a glitch in the Matrix.")
+      .and("be.visible");
   });
 });

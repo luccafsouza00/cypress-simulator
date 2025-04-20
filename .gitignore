@@ -1,5 +1,7 @@
 .DS_Store
 
+t/
+
 cypress.env.json
 cypress/downloads/
 cypress/screenshots/
