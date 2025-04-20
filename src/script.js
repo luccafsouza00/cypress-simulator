@@ -218,28 +218,28 @@ document.addEventListener("DOMContentLoaded", () => {
     return operator === "+" ? num1 + num2 : num1 - num2
   }
 
-  // loginButton.addEventListener("click", event => {
-  //   event.preventDefault()
+  loginButton.addEventListener("click", event => {
+    event.preventDefault()
 
-  //   if (skipCaptcha) {
-  //     const expiresAt = new Date()
-  //     expiresAt.setDate(expiresAt.getDate() + 30)
+    if (skipCaptcha) {
+      const expiresAt = new Date()
+      expiresAt.setDate(expiresAt.getDate() + 30)
 
-  //     localStorage.setItem("cypressSimulatorSession", JSON.stringify({
-  //       loggedIn: true,
-  //       expiresAt: expiresAt.getTime()
-  //     }))
+      localStorage.setItem("cypressSimulatorSession", JSON.stringify({
+        loggedIn: true,
+        expiresAt: expiresAt.getTime()
+      }))
 
-  //     loginForm.style.display = "none"
-  //     mainContent.style.display = "flex"
-  //     sandwichMenu.style.display = "flex"
-  //     checkCookieConsent()
-  //   } else {
-  //     loginForm.style.display = "none"
-  //     captchaSection.style.display = "flex"
-  //     window.expectedCaptchaResult = generateCaptcha()
-  //   }
-  // })
+      loginForm.style.display = "none"
+      mainContent.style.display = "flex"
+      sandwichMenu.style.display = "flex"
+      checkCookieConsent()
+    } else {
+      loginForm.style.display = "none"
+      captchaSection.style.display = "flex"
+      window.expectedCaptchaResult = generateCaptcha()
+    }
+  })
 
   verifyCaptchaButton.addEventListener("click", () => {
     const userAnswer = parseInt(captchaInput.value, 10)
